@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BO (zueira) — ultra simples</title>
+
+  <style>
+    :root{
+      --bg1:#05070e; --bg2:#0a1430;
+      --paper: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --shadow: 0 22px 80px rgba(0,0,0,.62);
+      --r: 20px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:var(--font); color:var(--text);
+      background:
+        radial-gradient(1000px 760px at 18% 18%, rgba(124,58,237,.30) 0%, transparent 60%),
+        radial-gradient(1000px 760px at 85% 28%, rgba(251,113,133,.22) 0%, transparent 62%),
+        radial-gradient(1200px 900px at 50% 110%, rgba(34,211,238,.14) 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      padding: 22px 14px 40px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    .doc{
+      border-radius:22px;
+      border:1px solid var(--stroke);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+    .top{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .brand{display:flex; gap:12px; align-items:center; min-width:0;}
+    .shield{
+      width:46px; height:46px; border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(14px 14px at 28% 26%, rgba(255,255,255,.35) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+      display:grid; place-items:center;
+      box-shadow:0 18px 40px rgba(0,0,0,.40);
+      flex:0 0 auto;
+      user-select:none;
+    }
+    .bn{min-width:0;}
+    .bn .org{
+      margin:0; font-size:13px; font-weight:950; letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70ch;
+    }
+    .bn .sub{margin:4px 0 0; font-size:12px; color:var(--muted)}
+    .metaRow{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;}
+    .chip{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      font-size:12px; color: rgba(255,255,255,.84);
+      white-space:nowrap;
+    }
+    .dot{width:8px; height:8px; border-radius:999px; background: rgba(255,211,107,.95); box-shadow:0 0 0 4px rgba(255,255,255,.10);}
+
+    .body{padding:16px; position:relative;}
+    .headline{display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:12px;}
+    .headline h2{margin:0; font-size: clamp(16px, 2.2vw, 24px); font-weight:980; letter-spacing:.2px;}
+    .proto{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+    .tag{
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82);
+      white-space:nowrap;
+    }
+    .stamp{
+      position:absolute; right:16px; top:84px;
+      transform: rotate(12deg);
+      border:2px dashed rgba(255,255,255,.30);
+      padding:10px 14px; border-radius:14px;
+      background: rgba(0,0,0,.14);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      opacity:.92; user-select:none;
+    }
+    .stamp .s1{display:block; font-weight:950; letter-spacing:.8px; text-transform:uppercase;}
+    .stamp .s2{display:block; font-weight:700; opacity:.9; margin-top:6px; font-size:11px; color: rgba(255,255,255,.85);}
+
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    .panel{
+      border-radius:18px; border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14); padding:12px;
+    }
+    .lab{font-size:11px; color: rgba(255,255,255,.65); letter-spacing:.2px; margin-bottom:8px;}
+    .val{font-size:13px; color: rgba(255,255,255,.90); line-height:1.55; white-space:pre-wrap; word-break:break-word;}
+
+    .rel{
+      margin-top:12px;
+      border-radius:18px; border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      padding:12px;
+    }
+    .txt{white-space:pre-wrap; line-height:1.8; font-size:13px; color: rgba(255,255,255,.90);}
+
+    .media{
+      margin-top:12px;
+      border-radius:18px; border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      padding:12px;
+      display:none; gap:12px;
+    }
+    .thumb{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      background: rgba(0,0,0,.16);
+      display:none;
+      cursor:pointer;
+    }
+    .thumb img{width:100%; height:min(340px,42vw); object-fit:cover; display:block;}
+    .player{display:none;}
+    audio, video{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#000;
+      display:block;
+    }
+
+    .meter{margin-top:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+    .ml{font-size:12px; color: rgba(255,255,255,.78); white-space:nowrap;}
+    .bar{
+      flex:1 1 260px; height:12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      overflow:hidden; min-width:220px;
+    }
+    .fill{
+      height:100%;
+      width:42%;
+      background: linear-gradient(90deg, rgba(125,211,252,.85), rgba(167,139,250,.80), rgba(251,113,133,.72));
+      box-shadow:0 0 20px rgba(167,139,250,.20);
+    }
+
+    .bottom{margin-top:12px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-end;}
+    .note{font-size:12px; color: rgba(255,255,255,.70); line-height:1.45}
+    .sign{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      white-space:nowrap;
+      max-width:100%;
+    }
+    .seal{width:12px; height:12px; border-radius:999px; background: rgba(255,211,107,.95); box-shadow:0 0 0 5px rgba(255,255,255,.10);}
+
+    /* overlay (foto/vídeo grande) */
+    .ov{
+      position:fixed; inset:0; z-index:9999;
+      display:none; place-items:center;
+      background: rgba(0,0,0,.88);
+      padding:14px;
+    }
+    .ov.show{display:grid;}
+    .ovBox{
+      width: min(980px, 100%);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(16,16,22,.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+    .ovTop{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.10); flex-wrap:wrap;
+    }
+    .btn{
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+      padding:10px 12px;
+      cursor:pointer;
+      font-size:13px;
+      display:inline-flex; gap:8px; align-items:center;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); }
+    .ovT{font-size:13px; font-weight:900; color: rgba(255,255,255,.92);}
+    .ovBody{padding:12px;}
+    .ovBody img{width:100%; border-radius:14px; border:1px solid rgba(255,255,255,.10); display:block;}
+    .ovBody video{width:100%; height:min(78vh,680px); border-radius:14px; border:1px solid rgba(255,255,255,.10); display:block; background:#000;}
+
+    @media (max-width:980px){
+      .grid2{grid-template-columns:1fr;}
+      .stamp{position:static; transform:none; margin:10px 0 0; display:inline-block;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="doc">
+      <div class="top">
+        <div class="brand">
+          <!-- ✅ EDITE AQUI: emoji do “vibe” (🕵️ ✅ 🚨 📁 etc) -->
+          <div class="shield">🕵️</div>
+
+          <div class="bn">
+            <!-- ✅ EDITE AQUI: organização -->
+            <p class="org">Delegacia da Zueira</p>
+
+            <!-- ✅ EDITE AQUI: linha de protocolo -->
+            <p class="sub">Registro recreativo • protocolo <span class="kbd">BO-000000-00</span></p>
+          </div>
+        </div>
+
+        <div class="metaRow">
+          <!-- ✅ EDITE AQUI: status (texto) -->
+          <div class="chip"><span class="dot"></span><strong>Em averiguação</strong></div>
+
+          <!-- ✅ EDITE AQUI: data/hora -->
+          <div class="chip">🗓️ <span>05/01/2026</span></div>
+          <div class="chip">⏱️ <span>19:51</span></div>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="headline">
+          <!-- ✅ EDITE AQUI: título -->
+          <h2>Boletim de Ocorrência — Caso Inusitado</h2>
+
+          <div class="proto">
+            <!-- ✅ EDITE AQUI: protocolo + local pequeno -->
+            <div class="tag">📄 <span>BO-000000-00</span></div>
+            <div class="tag">📍 <span>—</span></div>
+          </div>
+        </div>
+
+        <!-- ✅ EDITE AQUI: carimbo (duas linhas) -->
+        <div class="stamp">
+          <span class="s1">CARIMBO: EM AVERIGUAÇÃO</span>
+          <span class="s2">Nível de Gravidade: CRÍTICO</span>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <div class="lab">CLASSIFICAÇÃO DO CASO</div>
+            <!-- ✅ EDITE AQUI -->
+            <div class="val">Suspeita de excesso de charme</div>
+          </div>
+
+          <div class="panel">
+            <div class="lab">ENVOLVIDOS</div>
+            <!-- ✅ EDITE AQUI (sem id) -->
+            <div class="val">Sujeito(s) não identificado(s)</div>
+          </div>
+
+          <div class="panel">
+            <div class="lab">LOCAL DO FATO</div>
+            <!-- ✅ EDITE AQUI -->
+            <div class="val">Área comum / ambiente virtual</div>
+          </div>
+
+          <div class="panel">
+            <div class="lab">EVIDÊNCIAS (SE HOUVER)</div>
+            <!-- ✅ EDITE AQUI -->
+            <div class="val">prints, áudios suspeitos, risada fora do padrão</div>
+          </div>
+        </div>
+
+        <div class="rel">
+          <div class="lab">RELATO</div>
+          <!-- ✅ EDITE AQUI -->
+          <div class="txt">No horário indicado, foi detectada uma ocorrência incomum, com impacto direto no humor do ambiente.
+
+Relato preliminar:
+• risadas fora do padrão
+• elogios suspeitos de “bom demais”
+• possível tentativa de melhorar o dia de terceiros
+
+Providências sugeridas:
+• manter a brincadeira sob supervisão
+• compartilhar com alguém de confiança
+• evitar excesso de carisma em locais públicos</div>
+        </div>
+
+        <!-- ✅ ANEXOS (fixos por arquivo). Coloque os arquivos na mesma pasta e edite no script: MEDIA.photo/audio/video -->
+        <div class="media" id="mediaBox">
+          <div class="lab">ANEXOS</div>
+
+          <div class="thumb" id="photoBox" title="Clique para ampliar"></div>
+
+          <div class="player" id="audioBox"></div>
+          <div class="player" id="videoBox"></div>
+
+          <div class="lab" style="margin:0; opacity:.85" id="mediaHint"></div>
+        </div>
+
+        <div class="meter">
+          <!-- ✅ EDITE AQUI: texto da gravidade na barra -->
+          <div class="ml">📊 Nível de Gravidade: CRÍTICO</div>
+
+          <!-- ✅ EDITE AQUI: largura da barra (0% a 100%) -->
+          <div class="bar"><div class="fill" style="width:84%"></div></div>
+        </div>
+
+        <div class="bottom">
+          <div class="note">Documento criativo (zueira). Não use como documento real.</div>
+
+          <div class="sign">
+            <span class="seal"></span>
+            <!-- ✅ EDITE AQUI -->
+            <span>Agente responsável (modo brincadeira)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay (foto/vídeo grande) -->
+  <div class="ov" id="ov">
+    <div class="ovBox">
+      <div class="ovTop">
+        <div class="ovT" id="ovTitle">Anexo</div>
+        <button class="btn" id="btnCloseOv">✖️ Fechar</button>
+      </div>
+      <div class="ovBody" id="ovBody"></div>
+    </div>
+  </div>
+
+  <script>
+    /*****************************************************************
+     * ✅ ÚNICA COISA DE "SCRIPT" AQUI É A MÍDIA (pra você não sofrer)
+     * Coloque os arquivos na MESMA PASTA do HTML e escreva o nome aqui:
+     *   photo: "foto.jpg"
+     *   audio: "audio.mp3"
+     *   video: "video.mp4"
+     *
+     * Pode ser subpasta também:
+     *   photo: "midias/foto.jpg"
+     *****************************************************************/
+    const MEDIA = {
+      photo: "",   // ex: "foto.jpg"
+      audio: "",   // ex: "audio.mp3"
+      video: ""    // ex: "video.mp4"
+    };
+
+    // =============================================================
+    const $ = (id) => document.getElementById(id);
+
+    // overlay
+    function openOverlay(title, html){
+      $("ovTitle").textContent = title;
+      $("ovBody").innerHTML = html;
+      $("ov").classList.add("show");
+    }
+    function closeOverlay(){
+      $("ov").classList.remove("show");
+      $("ovBody").innerHTML = "";
+    }
+    $("btnCloseOv").addEventListener("click", closeOverlay);
+    $("ov").addEventListener("click", (e) => { if(e.target.id === "ov") closeOverlay(); });
+    window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeOverlay(); });
+
+    function renderMedia(){
+      const photo = (MEDIA.photo || "").trim();
+      const audio = (MEDIA.audio || "").trim();
+      const video = (MEDIA.video || "").trim();
+
+      const hasAny = !!(photo || audio || video);
+      $("mediaBox").style.display = hasAny ? "grid" : "none";
+
+      const names = [];
+      if(photo) names.push(`foto: ${photo}`);
+      if(audio) names.push(`áudio: ${audio}`);
+      if(video) names.push(`vídeo: ${video}`);
+      $("mediaHint").textContent = names.length ? ("Arquivos: " + names.join(" • ")) : "";
+
+      // foto
+      const photoBox = $("photoBox");
+      if(photo){
+        photoBox.style.display = "block";
+        photoBox.innerHTML = `<img src="${photo}" alt="Foto">`;
+        photoBox.onclick = () => openOverlay("🖼️ Foto", `<img src="${photo}" alt="Foto">`);
+      }else{
+        photoBox.style.display = "none";
+        photoBox.innerHTML = "";
+        photoBox.onclick = null;
+      }
+
+      // áudio
+      const audioBox = $("audioBox");
+      if(audio){
+        audioBox.style.display = "block";
+        audioBox.innerHTML = `<audio controls src="${audio}"></audio>`;
+      }else{
+        audioBox.style.display = "none";
+        audioBox.innerHTML = "";
+      }
+
+      // vídeo
+      const videoBox = $("videoBox");
+      if(video){
+        videoBox.style.display = "block";
+        videoBox.innerHTML = `<video controls playsinline preload="metadata" src="${video}"></video>`;
+        // clique abre grande
+        videoBox.onclick = () => openOverlay("🎬 Vídeo", `<video controls autoplay playsinline src="${video}"></video>`);
+      }else{
+        videoBox.style.display = "none";
+        videoBox.innerHTML = "";
+        videoBox.onclick = null;
+      }
+    }
+
+    renderMedia();
+  </script>
+</body>
+</html>
